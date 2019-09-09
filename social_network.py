@@ -26,17 +26,29 @@ class User:
         # current.day
         # current.year
 
-User001 = User('Ann', 1989, 3, 1)
-User002 = User('Masha', 1993, 12, 25)
-User003 = User('Borya', 1989, 2, 21)
+class SocialNetwork:
+    def __init__(self):
+        pass
 
-User001.add_friend(User002)
-User001.add_friend(User003)
-User002.add_friend(User001)
-User002.add_friend(User003)
-User003.add_friend(User001)
-User003.add_friend(User002)
+    @classmethod
+    def init_users(self, users):
+        self.users = users
 
-print(f'{User001.name}')
-print(f'{User002.get_age()} years')
-print(f'{len(User003.friends)}')
+user = []
+user.append(User('Ann', 1989, 3, 1))
+user.append(User('Masha', 1993, 12, 25))
+user.append(User('Borya', 1989, 2, 21))
+
+user[0].add_friend(user[1])
+user[0].add_friend(user[2])
+user[1].add_friend(user[0])
+user[1].add_friend(user[2])
+user[2].add_friend(user[0])
+user[2].add_friend(user[1])
+
+print(f'{user[0].name}')
+print(f'{user[1].get_age()} years')
+print(f'{len(user[2].friends)}')
+
+social_network = SocialNetwork()
+social_network.init_users(user)
