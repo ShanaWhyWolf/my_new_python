@@ -30,7 +30,7 @@ class Plane:
     def liftoff(self): #взлет
         print(f'{self.name} if lifting off')
 
-    def landind(self): #посадка
+    def landing(self): #посадка
         print(f'{self.name} is landing')
 
     @staticmethod

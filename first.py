@@ -119,3 +119,9 @@ def function_name(x):
 
 is_allowed_to_smoke(18)
 #Code -> Reformat Code, Auto-ident files автоформатирование
+
+#Деструктуризация
+#есть 2 массива
+list1 = [1, 2, 3]
+list2 = [3, 4, 5]
+lists = list1 + list2
