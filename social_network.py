@@ -1,12 +1,11 @@
+from datetime import date
 class User:
     def __init__(self, name, date_of_birth_year, date_of_birth_month, date_of_birth_day):
         self.name = name
-        from datetime import date
         self.date_of_birth = date(date_of_birth_year,date_of_birth_month,date_of_birth_day)
         self.friends = []
 
     def get_age(self):
-        from datetime import date
         current_date = date.today()
         age = (current_date - self.date_of_birth).days
         return str (age/365)
@@ -39,12 +38,11 @@ user.append(User('Ann', 1989, 3, 1))
 user.append(User('Masha', 1993, 12, 25))
 user.append(User('Borya', 1989, 2, 21))
 
-user[0].add_friend(user[1])
-user[0].add_friend(user[2])
-user[1].add_friend(user[0])
-user[1].add_friend(user[2])
-user[2].add_friend(user[0])
-user[2].add_friend(user[1])
+users_number = (3)
+for i in range(users_number):
+    for j in range(users_number):
+        if i != j:
+            user[i].add_friend(user[j])
 
 print(f'{user[0].name}')
 print(f'{user[1].get_age()} years')
