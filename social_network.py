@@ -1,3 +1,4 @@
+#Vpythone :)
 from datetime import date
 default_avatar = 'Default Avatar Url'
 class AvatarMixin:
@@ -11,6 +12,7 @@ class PremiumModeMixin:
 
     def enable_premium_mode(self):
         self.premium_mode_enabled = True
+
 
 class User(AvatarMixin, PremiumModeMixin):
     def __init__(self, name, date_of_birth_year, date_of_birth_month, date_of_birth_day):
@@ -30,6 +32,23 @@ class User(AvatarMixin, PremiumModeMixin):
         for friend in self.friends:
             print(friend.name)
 
+    def __str__(self):
+        return f'Name: {self.name} \nDate of Birth: {self.date_of_birth} \nNumber of Friends: {len(self.friends)}'
+
+    def __len__(self):
+        return len(self.friends)
+
+    def __gt__(self, other):
+        return len(self.friends) > len(other.friends)
+
+    def __lt__(self, other):
+        return len(self.friends) < len(other.friends)
+
+    def __ge__(self, other):
+        return len(self.friends) >= len(other.friends)
+
+    def __le__(self, other):
+        return len(self.friends) <= len(other.friends)
 
         # import datetime
         # current_date = datetime.date.today()
@@ -52,14 +71,19 @@ class SocialNetwork:
     def __init__(self):
         pass
 
-    @classmethod
     def init_users(self, users):
         self.users = users
+
+    def __getitem__(self, name):
+        users_list = list(filter(lambda x: x.name == name, self.users))
+        return users_list
+
 
 user = []
 user.append(Author('Ann', 1989, 3, 1))
 user.append(User('Masha', 1993, 12, 25))
 user.append(User('Borya', 1989, 2, 21))
+user.append(Author('Ann', 1989, 4, 12))
 
 users_number = (len(user))
 for i in range(users_number):
@@ -104,3 +128,26 @@ print("Users' premium modes")
 user[2].enable_premium_mode()
 for i in range(users_number):
     print(user[i].premium_mode_enabled)
+print("\n")
+
+user.append(Author('Alex', 1990, 12, 31))
+
+print("Users' parameters")
+for i in range(len(user)):
+    print(f'{user[i]} \n')
+
+print("Number of User's friends")
+for i in range(len(user)):
+    print(f'{len(user[i])} \n')
+
+print("Friends list comparison")
+print(user[0] > user[4])
+print(user[0] < user[4])
+print(user[0] >= user[4])
+print(user[0] <= user[4])
+print("\n")
+
+print("Users' with name Ann in Vpythone")
+name_to_find = 'Ann'
+for i in range(len(social_network[name_to_find])):
+    print(f'{social_network[name_to_find][i]}\n')
