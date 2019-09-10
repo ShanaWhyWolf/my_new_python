@@ -125,3 +125,4 @@ is_allowed_to_smoke(18)
 list1 = [1, 2, 3]
 list2 = [3, 4, 5]
 lists = list1 + list2
+

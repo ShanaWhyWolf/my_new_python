@@ -18,7 +18,11 @@ class Car:  # Классы называются с большой буквы
     def drive(self):
         print(f'{self.name} is driving')
 
+    def __str__(self):
+        return f'This is {self.name}'
 
+car = Car('Lada')
+print(car)
 print(Car.count_axis_number())
 
 class Plane:
@@ -36,3 +40,31 @@ class Plane:
     @staticmethod
     def get_wings_number(wings_number):
         return wings_number
+
+# Операторы сравнения
+class Fruit:
+    def __init__(self, name, weight):
+        self.name = name
+        self.weight = weight
+
+    def __gt__(self, other): #greater then
+        return self.weight > other.weight
+
+    def __lt__(self, other): #less then
+        return self.weight < other.weight
+
+    def __ge__(self, other): #greater or equal
+        return self.weight >= other.weight
+
+    def __eq__(self, other): #equal
+        return self.weight == other.weight
+
+    #def __add__(self, other): #сложение
+    def __len__(self):
+        return 100
+
+apple = Fruit('apple', 0.3)
+orange = Fruit('orange', 0.4)
+
+print(apple > orange)
+print(len(apple))
