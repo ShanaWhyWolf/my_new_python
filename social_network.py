@@ -1,4 +1,5 @@
 #Vpythone :)
+import csv
 from datetime import date
 default_avatar = 'Default Avatar Url'
 class AvatarMixin:
@@ -78,6 +79,15 @@ class SocialNetwork:
         users_list = list(filter(lambda x: x.name == name, self.users))
         return users_list
 
+#Метод для экспорта пользователей в CSV файл
+    def load_users_to_csv(self):
+        with open('users.csv', 'wt') as f:
+            writer = csv.DictWriter(f, ['name', 'dateofbirth', 'friendsnumber'])
+            writer.writeheader()
+            for item in self.users:
+                somedict = dict(name=f'{item.name}', dateofbirth=f'{item.date_of_birth}',
+                                friendsnumber=f'{len(item.friends)}')
+                writer.writerow(somedict)
 
 user = []
 user.append(Author('Ann', 1989, 3, 1))
@@ -151,3 +161,6 @@ print("Users' with name Ann in Vpythone")
 name_to_find = 'Ann'
 for i in range(len(social_network[name_to_find])):
     print(f'{social_network[name_to_find][i]}\n')
+
+social_network.load_users_to_csv()
+
