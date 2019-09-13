@@ -3,6 +3,9 @@ import csv
 from datetime import date
 import networkx as nx
 import matplotlib.pyplot as plt
+from peewee import SqliteDatabase, Model, CharField, DateField, BooleanField, ForeignKeyField
+
+db = SqliteDatabase('Vpythone.db')
 
 default_avatar = 'Default Avatar Url'
 class AvatarMixin:
@@ -17,12 +20,20 @@ class PremiumModeMixin:
     def enable_premium_mode(self):
         self.premium_mode_enabled = True
 
+class Friends(Model):
+    name1 = CharField()
+    name2 = CharField()
 
-class User(AvatarMixin, PremiumModeMixin):
-    def __init__(self, name, date_of_birth_year, date_of_birth_month, date_of_birth_day):
-        self.name = name
-        self.date_of_birth = date(date_of_birth_year,date_of_birth_month,date_of_birth_day)
-        self.friends = []
+    class Meta:
+        database = db
+
+
+class User(AvatarMixin, PremiumModeMixin, Model):
+    name = CharField()
+    date_of_birth = DateField()
+
+    class Meta:
+        database = db
 
     def get_age(self):
         current_date = date.today()
@@ -71,16 +82,26 @@ class Author(User):
         self.posts.pop(post_id)
 
 
-class SocialNetwork:
+class SocialNetwork(Model):
     users = nx.Graph()
 
-    def add_user(self, user: Author):
-        self.users.add_node(f'{user.name}', data={'name': f'{user.name}', 'date_of_birth': f'{user.date_of_birth}'})
+    def add_user(self, name, year_of_birth, month_of_birth, day_of_birth):
+        User.create(name = name, date_of_birth = date(year_of_birth, month_of_birth, day_of_birth))
 
-    def init_users(self, users):
-        self.users = users
+    def init_users(self):
+        tables = db.get_tables()
+        if len(tables) > 0:
+            users_list = list(User.select())
+            for user in users_list:
+                self.users.add_node(f'{user.name}')
+            friends_list = list(Friends.select())
+            for friend in friends_list:
+                self.users.add_edge(f'{friend.name1}', f'{friend.name2}')
+        else:
+            User.create_table()
 
     def add_friends(self, user1, user2):
+        Friends.create(name1 = user1, name2 = user2)
         self.users.add_edge(f'{user1}', f'{user2}')
 
     def recommend_friends(self, user):
@@ -115,20 +136,24 @@ class SocialNetwork:
  # user.append(User('Borya', 1989, 2, 21))
  # user.append(Author('Ann', 1989, 4, 12))
 
+Friends.create_table()
+
 social_network = SocialNetwork()
-social_network.add_user(Author('Ann', 1989, 3, 1))
-social_network.add_user(Author('Masha', 1993, 12, 25))
-social_network.add_user(Author('Borya', 1989, 2, 21))
-social_network.add_user(Author('Vladislav', 1781, 12, 25))
-social_network.add_user(Author('Yiura', 1991, 12, 12))
-social_network.add_user(Author('Nikolai', 1988, 2, 22))
+social_network.init_users()
 
-
-social_network.add_friends('Ann', 'Masha')
-social_network.add_friends('Borya', 'Masha')
-social_network.add_friends('Yiura', 'Masha')
-social_network.add_friends('Nikolai', 'Masha')
-social_network.add_friends('Ann', 'Vladislav')
+# social_network.add_user('Ann', 1989, 3, 1)
+# social_network.add_user('Masha', 1993, 12, 25)
+# social_network.add_user('Borya', 1989, 2, 21)
+# social_network.add_user('Vladislav', 1781, 12, 25)
+# social_network.add_user('Yiura', 1991, 12, 12)
+# social_network.add_user('Nikolai', 1988, 2, 22)
+#
+#
+# social_network.add_friends('Ann', 'Masha')
+# social_network.add_friends('Borya', 'Masha')
+# social_network.add_friends('Yiura', 'Masha')
+# social_network.add_friends('Nikolai', 'Masha')
+# social_network.add_friends('Ann', 'Vladislav')
 
 print(social_network.recommend_friends('Ann'))
 
